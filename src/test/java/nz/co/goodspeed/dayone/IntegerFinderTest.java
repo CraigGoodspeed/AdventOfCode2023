@@ -39,7 +39,7 @@ class IntegerFinderTest {
     @Test
     void debugger() {
         String[] values = new String[] {
-                "twone",
+                "twone",//this is what caught me out for a long time....
                 "two1nine",
                 "eightwothree",
                 "abcone2threexyz",
