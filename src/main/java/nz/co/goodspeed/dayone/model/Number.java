@@ -7,7 +7,13 @@ public class Number {
     String value;
     int index;
     public Number(MatchResult result) {
-        value = parseGroup(result.group(1));
+        int count = result.groupCount();
+        for(int i = 0; i <= count; i++) {
+            if(!result.group(i).isEmpty()) {
+                value = parseGroup(result.group(i));
+                break;
+            }
+        }
         index = result.start();
     }
 
