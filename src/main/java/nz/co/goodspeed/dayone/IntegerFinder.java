@@ -1,38 +1,25 @@
 package nz.co.goodspeed.dayone;
 
-public class IntegerFinder {
+import nz.co.goodspeed.dayone.model.Number;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.regex.Pattern;
+
+public class IntegerFinder {
+    private static final String REGEX = "(?=(\\d|one|two|three|four|five|six|seven|eight|nine)){1}";
     String left;
     String right;
     Integer value;
 
     public IntegerFinder(String toParse) {
-        left = getLeftMostInteger(toParse);
-        right = getRightMostInteger(toParse);
-        value = Integer.parseInt(String.format("%s%s", left,right));
-    }
-
-    private boolean isInt(char val) {
-        return  48 <= (int)val && (int)val <= 57;
-    }
-
-    private String getLeftMostInteger(String item) {
-        for(char i : item.toCharArray()) {
-            if(isInt(i)) {
-              return String.valueOf(i);
-            }
-        }
-        throw new RuntimeException("no integer found");
-    }
-
-    private String getRightMostInteger(String item) {
-        char[] data = item.toCharArray();
-        for(int i = data.length - 1; i >= 0; i--) {
-            if(isInt(data[i])) {
-                return String.valueOf(data[i]);
-            }
-        }
-        throw new RuntimeException("no integer found");
+        Pattern pattern = Pattern.compile(REGEX, Pattern.CASE_INSENSITIVE);
+        List<Number> data = pattern.matcher(toParse).results().map(
+            Number::new
+        ).toList();
+        left = data.stream().min(Comparator.comparing(Number::getIndex)).get().getValue();
+        right = data.stream().max(Comparator.comparing(Number::getIndex)).get().getValue();
+        value = Integer.valueOf(String.format("%s%s", left,right));
     }
 
     public String getLeft() {
