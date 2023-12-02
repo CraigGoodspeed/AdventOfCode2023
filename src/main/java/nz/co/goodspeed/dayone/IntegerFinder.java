@@ -17,8 +17,8 @@ public class IntegerFinder {
         List<Number> data = pattern.matcher(toParse).results().map(
             Number::new
         ).toList();
-        left = data.stream().min(Comparator.comparing(Number::getIndex)).get().getValue();
-        right = data.stream().max(Comparator.comparing(Number::getIndex)).get().getValue();
+        left = data.stream().min(Comparator.comparing(Number::getIndex)).orElseThrow().getValue();
+        right = data.stream().max(Comparator.comparing(Number::getIndex)).orElseThrow().getValue();
         value = Integer.valueOf(String.format("%s%s", left,right));
     }
 
