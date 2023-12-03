@@ -27,7 +27,8 @@ public class Main {
 
         int result = 0;
         for(Line item: items) {
-            result += item.findAllIntegersWithAdjacentSymbol().stream().reduce(0, Integer::sum);
+            int addMe = item.findAllIntegersWithAdjacentSymbol().stream().reduce(0, Integer::sum);
+            result += addMe;
         }
         System.out.println(result);
     }

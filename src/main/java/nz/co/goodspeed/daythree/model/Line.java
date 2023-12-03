@@ -47,7 +47,7 @@ public class Line {
         if(input == null)
             return new ArrayList<>();
         List<Integer> toReturn = new ArrayList<>();
-        String regex = "[^(\\d|\\.)]";
+        String regex = "[^(\\d|\\.)]+";
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         return pattern.matcher(input.getInput()).results().mapToInt(MatchResult::start).boxed().toList();
     }
@@ -76,11 +76,11 @@ public class Line {
         int adjacentEnd = end + 1;
 
         return prior.stream().anyMatch(
-                i -> i >= adjacentStart && i <= adjacentEnd
+                i -> i >= adjacentStart && i < adjacentEnd
         ) || next.stream().anyMatch(
-                i -> i >= adjacentStart && i <= adjacentEnd
+                i -> i >= adjacentStart && i < adjacentEnd
         ) || current.stream().anyMatch(
-                i -> i == (adjacentStart) || i == (adjacentEnd - 1)
+                i -> i == adjacentStart || i == (adjacentEnd - 1)
         );
     }
 
