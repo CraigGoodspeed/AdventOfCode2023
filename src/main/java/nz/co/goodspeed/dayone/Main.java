@@ -1,19 +1,26 @@
 package nz.co.goodspeed.dayone;
 
+import nz.co.goodspeed.AppStartup;
+
 import java.io.IOException;
 import java.io.File;
 import java.util.Scanner;
 
-public class Main {
+public class Main extends AppStartup {
+
+    public Main(String filePath) {
+        super(filePath);
+    }
+    static int result = 0;
     public static void main(String[] args) throws IOException {
-        int result = 0;
-        File file = new File("/home/craig/dev/AdventOfCode2023/input/dayone/dayone.txt");
-        Scanner scanner = new Scanner(file);
-        while(scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            IntegerFinder finder = new IntegerFinder(line);
-            result += finder.getValue();
-        }
+        Main main = new Main("/Users/goodspeedc/dev/AdventOfCode2023/input/dayone/dayone.txt");
+        main.start();
         System.out.println(result);
+    }
+
+    @Override
+    public void runForEachLine(String line) {
+        IntegerFinder finder = new IntegerFinder(line);
+        result += finder.getValue();
     }
 }

@@ -1,23 +1,22 @@
 package nz.co.goodspeed.daytwo;
 
 
+import nz.co.goodspeed.AppStartup;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class Main {
+public class Main extends AppStartup {
+
+    static int result;
+    public Main(String filePath) {
+        super(filePath);
+    }
 
     public static void main(String[] args) throws IOException {
-        int result = 0;
-        File file = new File("/home/craig/dev/AdventOfCode2023/input/daytwo/daytwo.txt");
-        Scanner scanner = new Scanner(file);
-        while(scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            Game currentGame = new Game(line);
-            if(isValidGame(currentGame)) {
-                result += currentGame.getGameIndex();
-            }
-        }
+        Main main = new Main("/Users/goodspeedc/dev/AdventOfCode2023/input/daytwo/daytwo.txt");
+        main.start();
         System.out.println(result);
     }
 
@@ -26,4 +25,11 @@ public class Main {
     }
 
 
+    @Override
+    public void runForEachLine(String line) {
+        Game currentGame = new Game(line);
+        if(isValidGame(currentGame)) {
+            result += currentGame.getGameIndex();
+        }
+    }
 }
