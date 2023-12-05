@@ -20,6 +20,35 @@ public enum Types {
         return index;
     }
 
+    public Types getPrevious() {
+        switch (this) {
+            case SOIL -> {
+                return SEED;
+            }
+            case FERTILIZER -> {
+                return SOIL;
+            }
+            case WATER -> {
+                return FERTILIZER;
+            }
+            case LIGHT -> {
+                return WATER;
+            }
+            case TEMPERATURE -> {
+                return LIGHT;
+            }
+            case HUMIDITY -> {
+                return TEMPERATURE;
+            }
+            case LOCATION -> {
+                return HUMIDITY;
+            }
+            default-> {
+                return null;
+            }
+        }
+    }
+
     public Types getNext() {
         switch (this) {
             case SEED -> {

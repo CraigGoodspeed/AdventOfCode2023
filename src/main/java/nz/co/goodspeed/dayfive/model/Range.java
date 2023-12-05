@@ -60,4 +60,8 @@ public class Range {
     public long getDestinationIndex(long sourceValue) {
         return getDestination() + (sourceValue - getSource());
     }
+
+    public long getSourceIndex(long destinationIndex) {
+        return destinationIndex + (getSource() - getDestination());
+    }
 }

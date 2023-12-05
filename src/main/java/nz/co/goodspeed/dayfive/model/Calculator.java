@@ -69,6 +69,17 @@ public class Calculator {
         );
     }
 
+    public Range getSourceIndex(Types destinationType, long destinationIndex) {
+        return getRanges().stream().filter(
+                i -> i.getDestinationType() == destinationType
+                && i.getDestination() <= destinationIndex
+                && i.getCalculatedEndDestination() >= destinationIndex).findFirst().orElse(
+                    new Range(
+                            destinationIndex, destinationIndex, 1L, destinationType.getPrevious(), destinationType
+                    )
+        );
+    }
+
     public List<Long> getExtremes(List<StartingRanges.StartAndEnd> startAndEnd) throws InterruptedException {
         List<Long> extremes = new ArrayList<>();
         List<Range> seeds = ranges.stream().filter(range ->
@@ -102,19 +113,26 @@ public class Calculator {
         return minValues;
     }
 
-    private long checkItems(List<Long> extremes) {
-        long returnMe = -1;
-        for(long i : extremes) {
-            Range item = getDestinationIndex(Types.SEED, i);
-            long index = item.getDestinationIndex(i);
+    public long reverseOrder(List<StartingRanges.StartAndEnd> startAndEnd) {
+        long toReturn = -1;
+        boolean keepLooping = true;
+        for(long i = 0; keepLooping; i++) {
+            Range srcIndex = getSourceIndex(Types.LOCATION, i);
+            long index = srcIndex.getSourceIndex(i);
             do {
-                item = getDestinationIndex(item.getDestinationType(), index);
-                index = item.getDestinationIndex(index);
-            } while (item.getDestinationType() != null);
-            if(returnMe == -1 || returnMe > index)
-                returnMe = index;
+                //System.out.println(String.format("%s to %s is %s", srcIndex.getSourceType().name(), srcIndex.getDestinationType().name(), index));
+                srcIndex = getSourceIndex(srcIndex.getSourceType(), index);
+                index = srcIndex.getSourceIndex(index);
+            } while (srcIndex.getSourceType() != null);
+            long finalIndex = index;
+            keepLooping = startAndEnd.stream().filter(
+                    tmp -> tmp.getStart() <= finalIndex
+                            && tmp.getEnd() >= finalIndex
+            ).findFirst().isEmpty();
+            if(!keepLooping)
+                return i;
+
         }
-        System.out.println("got this one");
-        return returnMe;
+        return toReturn;
     }
 }

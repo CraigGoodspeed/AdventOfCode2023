@@ -39,5 +39,28 @@ class Main1Test {
     }
 
 
+    @Test
+    void checkLoadUp2() throws IOException, InterruptedException {
+        Main1 mn1 = new Main1("/home/craig/dev/AdventOfCode2023/input/dayFive/input.txt");
+        Calculator calculator = new Calculator(mn1.readAll());
+        assertFalse(calculator.getRanges().isEmpty());
+
+        StartingRanges ranges = new StartingRanges(calculator.getStartingPoints());
+
+        //List<Long> extremes = calculator.getExtremes(ranges.getMyItems());
+        /*HashSet<Long> startIndexes = new HashSet<>();
+
+        for(StartingRanges.StartAndEnd range : ) {
+            for (long i = range.getStart(); i < range.getEnd(); i++) {
+                startIndexes.add(i);
+            }
+
+        }*/
+
+
+        System.out.println(calculator.reverseOrder(ranges.getMyItems()));
+    }
+
+
 
 }
