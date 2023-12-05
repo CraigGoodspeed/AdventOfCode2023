@@ -19,12 +19,12 @@ public class Main extends AppStartup {
         super(filePath);
     }
     public static void main(String[] args) throws IOException {
-        Main main = new Main("/Users/goodspeedc/dev/AdventOfCode2023/input/daythree/three.txt");
+        Main main = new Main("/home/craig/dev/AdventOfCode2023/input/daythree/three.txt");
         main.start();
 
         int result = 0;
         for(Line item: items) {
-            int addMe = item.findAllIntegersWithAdjacentSymbol().stream().reduce(0, Integer::sum);
+            int addMe = item.findAllIntegersAdjacentToStar().stream().reduce(0, Integer::sum);
             result += addMe;
         }
 

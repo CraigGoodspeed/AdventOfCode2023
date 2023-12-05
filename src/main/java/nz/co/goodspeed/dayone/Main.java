@@ -13,7 +13,7 @@ public class Main extends AppStartup {
     }
     static int result = 0;
     public static void main(String[] args) throws IOException {
-        Main main = new Main("/Users/goodspeedc/dev/AdventOfCode2023/input/dayone/dayone.txt");
+        Main main = new Main("/home/craig/dev/AdventOfCode2023/input/dayone/dayone.txt");
         main.start();
         System.out.println(result);
     }

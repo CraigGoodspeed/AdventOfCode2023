@@ -113,8 +113,42 @@ class LineTest {
         }
 
         assertEquals(Arrays.stream(byHand).sum(), result);
+    }
 
 
+    @Test
+    void partTwo() {
+        String[] data = new String[] {
+                "467..114..",
+                "...*......",
+                "..35..633.",
+                "......#...",
+                "617*......",
+                ".....+.58.",
+                "..592.....",
+                "......755.",
+                "...$.*....",
+                ".664.598.."
+        };
+
+        List<Line> items = new ArrayList<>();
+        Line previous = null;
+        for(String dat : data) {
+            items.add(new Line(dat, previous));
+            previous = items.get(items.size() -1);
+        }
+
+        for(int i = 0; i < items.size() - 1; i++) {
+            items.get(i).setNext(items.get(i + 1));
+        }
+
+        int result = 0;
+        for(Line item: items) {
+            int addMe = item.findAllIntegersAdjacentToStar().stream().reduce(0, Integer::sum);
+            result += addMe;
+        }
+
+        System.out.println(result);
     }
 
 }

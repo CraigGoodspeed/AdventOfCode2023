@@ -14,7 +14,7 @@ public class Main2 extends AppStartup {
     }
 
     public static void main(String[] args) throws IOException {
-        Main2 main = new Main2("/Users/goodspeedc/dev/AdventOfCode2023/input/daytwo/daytwo.txt");
+        Main2 main = new Main2("/home/craig/dev/AdventOfCode2023/input/daytwo/daytwo.txt");
         main.start();
         System.out.println(result);
     }
