@@ -26,34 +26,54 @@ public class Hand {
 
         List<Integer> indexHelper = new ArrayList<>();
         int count = -1;
+        int jackCount = (int)cards.stream().filter(i -> i == CardTypes.J).count();
         for(CardTypes type : CardTypes.values()) {
-            count = (int)cards.stream().filter(i -> i == type)
-                    .count();
-            if(count > 0) {
-                indexHelper.add(count);
+            if(cards.contains(type) && type != CardTypes.J) {
+                count = (int) cards.stream().filter(i -> i == type)
+                        .count();
+                if (count > 0) {
+                    indexHelper.add(count);
+
+                }
             }
         }
 
+        if(indexHelper.isEmpty() && jackCount == 5) {
+            // 5 J's
+            indexHelper.add(0);
+        }
+
         indexHelper.sort(Collections.reverseOrder());
+        indexHelper.set(0,indexHelper.get(0) + jackCount);
+        handType = performIf(indexHelper);
+        return handType;
+    }
+
+    private HandType performIf(List<Integer> vals) {
         handType = HandType.HighCard;
-        for(int i : indexHelper) {
+        for(int i : vals) {
             if( i == 5) {
                 handType = HandType.FiveOfAKind;
+                break;
             }
             else if(i == 4) {
                 handType = HandType.FourOfAKind;
+                break;
             }
             else if(i == 3 && handType == HandType.Pair) {
                 handType = HandType.FullHouse;
+                break;
             }
             else if (i == 3) {
                 handType = HandType.ThreeOfAKind;
             }
             else if(i == 2 && handType == HandType.ThreeOfAKind) {
                 handType = HandType.FullHouse;
+                break;
             }
             else if(i == 2 && handType == HandType.Pair) {
                 handType = HandType.TwoPair;
+                break;
             }
             else if(i == 2) {
                 handType = HandType.Pair;

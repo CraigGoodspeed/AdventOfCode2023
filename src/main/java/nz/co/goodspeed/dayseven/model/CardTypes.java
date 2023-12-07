@@ -3,6 +3,7 @@ package nz.co.goodspeed.dayseven.model;
 import java.util.List;
 
 public enum CardTypes {
+    J(10),
     _2(1),
     _3(2),
     _4(3),
@@ -12,7 +13,6 @@ public enum CardTypes {
     _8(7),
     _9(8),
     T(9),
-    J(10),
     Q(11),
     K(12),
     A(13);
