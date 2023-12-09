@@ -11,11 +11,14 @@ public class Node {
 
     Node stepRight;
 
+    Node[] childArray;
+
     boolean endpoint;
 
     public Node(String text) {
         this.text = text;
         endpoint = this.text.endsWith("Z");
+        childArray = new Node[2];
     }
 
     public Node(String text, String encodedText, Map<String, Node> tree) {
@@ -28,6 +31,10 @@ public class Node {
         stepLeft = buildTreeItem(tree, leftAndRight[0]);
         stepRight = buildTreeItem(tree, leftAndRight[1]);
         endpoint = this.text.endsWith("Z");
+        childArray = new Node[]{
+                stepLeft,
+                stepRight
+        };
     }
 
     public Node buildTreeItem(Map<String, Node> tree, String index) {
@@ -65,15 +72,11 @@ public class Node {
     }
 
     public Node step(Direction step) {
-        return step == Direction.LEFT ?
-                getStepLeft() :
-                getStepRight();
+        return this.step(step.getIndex());
     }
 
     public Node step(int index) {
-        return index == Direction.LEFT.getIndex() ?
-                getStepLeft() :
-                getStepRight();
+        return this.childArray[index];
     }
 
     public boolean isEndPoint() {

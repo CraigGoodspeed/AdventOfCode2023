@@ -1,6 +1,7 @@
 package nz.co.goodspeed.dayeight;
 
 import nz.co.goodspeed.AppStartup;
+import nz.co.goodspeed.dayeight.model.Direction;
 import nz.co.goodspeed.dayeight.model.DirectionSteps;
 import nz.co.goodspeed.dayeight.model.Node;
 
@@ -43,28 +44,35 @@ public class Main extends AppStartup {
     ) throws FileNotFoundException {
         Main tst = new Main("/home/craig/dev/AdventOfCode2023/input/dayeight/actual.txt");
         List<Node> state = getStartingPoints(tst.steps);
-        int count = 0;
+        long count = 0;
+        long currentMillis = System.currentTimeMillis();
+        List<Direction> directionSteps = tst.directionSteps.getInput();
         while(!isEndPoint(state)) {
-            for(int i = 0;
-                i < tst.directionSteps.getInput().size()
-                &&
-                !isEndPoint(state)
-                    ;
-                i++) {
-                int finalI = i;
-
-
+            for(Direction item: directionSteps) {
                 state = new ArrayList<>(
-                state.parallelStream()
-                        .map(m ->
-                                tst.steps.get(
-                                        m.step(tst.directionSteps.getInput().get(finalI).getIndex()).getText()
-                                )
-                        ).toList()
+                        state.parallelStream()
+                                .map(m ->
+                                        tst.steps.get(
+                                                m.step(item.getIndex()).getText()
+                                        )
+                                ).toList()
                 );
-
                 count++;
+                if(isEndPoint(state)) {
+                    break;
+                }
+                if(count % 500000 == 0) {
+                    System.out.println(
+                            String.format(
+                                    "took %s to process 500000 currently at %s",
+                                    System.currentTimeMillis() - currentMillis,
+                                    count
+                            )
+                    );
+                    currentMillis = System.currentTimeMillis();
+                }
             }
+
             //System.out.println(String.format("one loop %s", (System.currentTimeMillis() - start) ));
         }
 
