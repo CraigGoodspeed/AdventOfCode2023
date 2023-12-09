@@ -19,7 +19,6 @@ public class Main extends AppStartup {
         super(path);
         this.steps = new HashMap<>();
         super.start();
-        resolveChildren();
     }
 
     private void resolveChildren() {
@@ -42,11 +41,10 @@ public class Main extends AppStartup {
     public static void main(
             String[] args
     ) throws FileNotFoundException {
-        Main tst = new Main("/home/craig/dev/AdventOfCode2023/input/dayeight/test.txt");
+        Main tst = new Main("/home/craig/dev/AdventOfCode2023/input/dayeight/actual.txt");
         List<Node> state = getStartingPoints(tst.steps);
         int count = 0;
         while(!isEndPoint(state)) {
-            long start = System.currentTimeMillis();
             for(int i = 0;
                 i < tst.directionSteps.getInput().size()
                 &&
@@ -55,16 +53,19 @@ public class Main extends AppStartup {
                 i++) {
                 int finalI = i;
 
+
                 state = new ArrayList<>(
                 state.parallelStream()
                         .map(m ->
-                                m.step(tst.directionSteps.getInput().get(finalI))
+                                tst.steps.get(
+                                        m.step(tst.directionSteps.getInput().get(finalI).getIndex()).getText()
+                                )
                         ).toList()
                 );
 
                 count++;
             }
-            System.out.println(String.format("one loop %s", (System.currentTimeMillis() - start) ));
+            //System.out.println(String.format("one loop %s", (System.currentTimeMillis() - start) ));
         }
 
         System.out.println(count);
@@ -72,17 +73,13 @@ public class Main extends AppStartup {
     }
 
     private static List<Node> getStartingPoints(Map<String, Node> steps) {
-        List<Node> toReturn = new ArrayList<>();
         return steps.keySet().stream().filter(i -> i.endsWith("A"))
                 .map(i -> steps.get(i))
                 .toList();
     }
 
     private static boolean isEndPoint(List<Node> data) {
-        long start = System.currentTimeMillis();
-        boolean toReturn = data.stream().allMatch( i -> i.getText().endsWith("Z"));
-        System.out.println(String.format("is end %s", (System.currentTimeMillis() - start) ));
-        return toReturn;
+        return data.stream().allMatch(Node::isEndPoint);
     }
 
     @Override

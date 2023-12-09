@@ -11,8 +11,11 @@ public class Node {
 
     Node stepRight;
 
+    boolean endpoint;
+
     public Node(String text) {
         this.text = text;
+        endpoint = this.text.endsWith("Z");
     }
 
     public Node(String text, String encodedText, Map<String, Node> tree) {
@@ -24,6 +27,7 @@ public class Node {
         String[] leftAndRight = encodedText.split(",");
         stepLeft = buildTreeItem(tree, leftAndRight[0]);
         stepRight = buildTreeItem(tree, leftAndRight[1]);
+        endpoint = this.text.endsWith("Z");
     }
 
     public Node buildTreeItem(Map<String, Node> tree, String index) {
@@ -64,5 +68,15 @@ public class Node {
         return step == Direction.LEFT ?
                 getStepLeft() :
                 getStepRight();
+    }
+
+    public Node step(int index) {
+        return index == Direction.LEFT.getIndex() ?
+                getStepLeft() :
+                getStepRight();
+    }
+
+    public boolean isEndPoint() {
+        return endpoint;
     }
 }
