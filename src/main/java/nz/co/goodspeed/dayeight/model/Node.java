@@ -1,5 +1,6 @@
 package nz.co.goodspeed.dayeight.model;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -15,26 +16,12 @@ public class Node {
 
     boolean endpoint;
 
+    int iterationCount;
+
     public Node(String text) {
         this.text = text;
         endpoint = this.text.endsWith("Z");
         childArray = new Node[2];
-    }
-
-    public Node(String text, String encodedText, Map<String, Node> tree) {
-        this.text = text;
-        //   (AAA,GGG)
-        encodedText = encodedText.replace(" ", "");
-        encodedText = encodedText.replace("(","");
-        encodedText = encodedText.replace(")","");
-        String[] leftAndRight = encodedText.split(",");
-        stepLeft = buildTreeItem(tree, leftAndRight[0]);
-        stepRight = buildTreeItem(tree, leftAndRight[1]);
-        endpoint = this.text.endsWith("Z");
-        childArray = new Node[]{
-                stepLeft,
-                stepRight
-        };
     }
 
     public Node buildTreeItem(Map<String, Node> tree, String index) {
@@ -61,6 +48,7 @@ public class Node {
 
     public void setStepLeft(Node stepLeft) {
         this.stepLeft = stepLeft;
+        this.childArray[0] = stepLeft;
     }
 
     public Node getStepRight() {
@@ -69,6 +57,7 @@ public class Node {
 
     public void setStepRight(Node stepRight) {
         this.stepRight = stepRight;
+        this.childArray[1] = stepRight;
     }
 
     public Node step(Direction step) {
@@ -81,5 +70,34 @@ public class Node {
 
     public boolean isEndPoint() {
         return endpoint;
+    }
+
+    public static class NodeStateHolder {
+        private final Node[] children;
+        boolean isEnd = false;
+
+        public NodeStateHolder(List<Node> data) {
+            children = data.toArray(new Node[0]);
+        }
+
+        public void step(Direction step) {
+            isEnd = true;
+            for(int i = 0; i < children.length;i++) {
+                children[i] = children[i].step(step);
+                isEnd = isEnd && children[i].isEndPoint();
+            }
+        }
+
+        public boolean endIndex() {
+            return isEnd;
+        }
+    }
+
+    public int getIterationCount() {
+        return iterationCount;
+    }
+
+    public void setIterationCount(int iterationCount) {
+        this.iterationCount = iterationCount;
     }
 }

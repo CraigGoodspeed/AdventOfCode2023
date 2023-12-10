@@ -16,10 +16,34 @@ public class Main extends AppStartup {
     DirectionSteps directionSteps;
     Map<String, Node> steps;
 
+    List<String> keyNames = new ArrayList<>();
+    List<String> keyDestinations = new ArrayList<>();
+
     public Main(String path) throws FileNotFoundException {
         super(path);
         this.steps = new HashMap<>();
         super.start();
+
+        for (String key: keyNames) {
+            steps.put(key, new Node(key));
+        }
+
+        for(int i = 0; i < keyNames.size(); i++) {
+            String encodedText = keyDestinations.get(i);
+            encodedText = encodedText.replace(" ", "");
+            encodedText = encodedText.replace("(","");
+            encodedText = encodedText.replace(")","");
+            String[] leftAndRight = encodedText.split(",");
+            Node left = steps.get(leftAndRight[0]);
+            Node right = steps.get(leftAndRight[1]);
+            steps.get(keyNames.get(i))
+                    .setStepRight(right);
+            steps.get(keyNames.get(i))
+                    .setStepLeft(left);
+
+
+        }
+
     }
 
     private void resolveChildren() {
@@ -44,39 +68,25 @@ public class Main extends AppStartup {
     ) throws FileNotFoundException {
         Main tst = new Main("/home/craig/dev/AdventOfCode2023/input/dayeight/actual.txt");
         List<Node> state = getStartingPoints(tst.steps);
-        long count = 0;
-        long currentMillis = System.currentTimeMillis();
         List<Direction> directionSteps = tst.directionSteps.getInput();
-        while(!isEndPoint(state)) {
-            for(Direction item: directionSteps) {
-                state = new ArrayList<>(
-                        state.parallelStream()
-                                .map(m ->
-                                        tst.steps.get(
-                                                m.step(item.getIndex()).getText()
-                                        )
-                                ).toList()
-                );
-                count++;
-                if(isEndPoint(state)) {
-                    break;
+
+        long total = 1;
+        for(Node node : state) {
+            Node tmp = node;
+            int outerCount = 0;
+            while(!tmp.isEndPoint()) {
+                for (Direction item : directionSteps) {
+                    tmp = tmp.step(item);
+                    if (tmp.isEndPoint()) {
+                        break;
+                    }
                 }
-                if(count % 500000 == 0) {
-                    System.out.println(
-                            String.format(
-                                    "took %s to process 500000 currently at %s",
-                                    System.currentTimeMillis() - currentMillis,
-                                    count
-                            )
-                    );
-                    currentMillis = System.currentTimeMillis();
-                }
+                outerCount++;
             }
-
-            //System.out.println(String.format("one loop %s", (System.currentTimeMillis() - start) ));
+            node.setIterationCount(outerCount);
+            total *= outerCount;
         }
-
-        System.out.println(count);
+        System.out.println(total * directionSteps.size());
 
     }
 
@@ -90,6 +100,8 @@ public class Main extends AppStartup {
         return data.stream().allMatch(Node::isEndPoint);
     }
 
+
+
     @Override
     public void runForEachLine(String line) {
         if(line.isEmpty()) {
@@ -100,7 +112,8 @@ public class Main extends AppStartup {
         else {
             String[] data = line.split("=");
             String nodeText = data[0].replace(" ","");
-            steps.put(nodeText, new Node(nodeText, data[1], steps));
+            keyNames.add(nodeText);
+            keyDestinations.add(data[1]);
         }
     }
 }
