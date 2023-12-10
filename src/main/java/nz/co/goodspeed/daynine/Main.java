@@ -23,20 +23,25 @@ public class Main extends AppStartup {
     public static void main(String[] args) throws FileNotFoundException {
         Main mne = new Main("/home/craig/dev/AdventOfCode2023/input/daynine/actual.txt");
 
-        int runningTotal = 0;
+        int toReturn = 0;
         for(NumberCollection collection : mne.numbers) {
             NumberCollection startHere = collection;
+            int runningTotal = 0;
             while(!startHere.isiAmAllZeros()) {
                 startHere = startHere.getNext();
             }
 
             do {
-                runningTotal = runningTotal + startHere.getParentMaxNumber();
+                runningTotal = startHere.calculateParentNextMin(runningTotal);
                 startHere = startHere.getPrev();
             } while(startHere != null);
+            System.out.println(runningTotal);
+            toReturn += runningTotal;
         }
 
+        System.out.println(toReturn);
 
-        System.out.println(runningTotal);
+
+
     }
 }

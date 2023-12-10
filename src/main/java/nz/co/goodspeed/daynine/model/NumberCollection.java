@@ -66,4 +66,13 @@ public class NumberCollection {
     public Integer getParentMaxNumber() {
         return this.parentNumbers.get(this.parentNumbers.size() - 1);
     }
+
+    public Integer getParentMinValue() {
+        return this.parentNumbers.get(0);
+    }
+
+    public Integer calculateParentNextMin(Integer priorMin) {
+        Integer parentMin = this.getParentMinValue();
+        return parentMin - priorMin;
+    }
 }
