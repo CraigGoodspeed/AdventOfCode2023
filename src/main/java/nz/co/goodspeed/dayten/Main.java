@@ -1,6 +1,7 @@
 package nz.co.goodspeed.dayten;
 
 import nz.co.goodspeed.AppStartup;
+import nz.co.goodspeed.dayten.model.EnclosedBy;
 import nz.co.goodspeed.dayten.model.Point;
 import nz.co.goodspeed.dayten.model.PointHelper;
 
@@ -40,7 +41,7 @@ public class Main extends AppStartup {
     }
 
     public static void main(String[] args) throws IOException {
-        Main tmp = new Main("/home/craig/dev/AdventOfCode2023/input/dayten/actual.txt");
+        Main tmp = new Main("/home/craig/dev/AdventOfCode2023/input/dayten/test.txt");
         List<Point> startHere = tmp.start.travelFromStart();
         PointHelper startPoint = tmp.start.getPoint();
         Point source = tmp.start;
@@ -63,6 +64,26 @@ public class Main extends AppStartup {
             }
         }
         OptionalInt optInt = Arrays.stream(tmp.steps).flatMapToInt(Arrays::stream).max();
+
+        EnclosedBy enclosedBy = new EnclosedBy(tmp.steps, tmp.map);
+        for(int x = 0; x < tmp.map.length; x++) {
+            for(int y = 0; y < tmp.map[x].length; y++) {
+                enclosedBy.add(new Point(tmp.map, x, y));
+            }
+        }
+
+        System.out.println(enclosedBy.getItems());
+
+        List<List<Point>> withItems = enclosedBy.getItems().stream().filter(i -> i.size() > 0).toList();
+        int size = 0;
+
+        for(List<Point> listedItem: withItems) {
+           size += listedItem.size();
+        }
+
+        System.out.println(size);
+
+
 
         System.out.println(
             optInt.getAsInt()
