@@ -35,4 +35,10 @@ public class Map {
         return this.map[location.getX()][location.getY()];
     }
 
+    public boolean isOnMap(Coordinates location) {
+        return
+                location.getX() < this.map.length && location.getX() >= 0
+                && location.getY() < this.map[0].length && location.getY() >= 0;
+    }
+
 }
