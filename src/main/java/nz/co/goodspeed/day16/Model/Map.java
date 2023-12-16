@@ -1,6 +1,8 @@
 package nz.co.goodspeed.day16.Model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Map {
 
@@ -41,4 +43,7 @@ public class Map {
                 && location.getY() < this.map[0].length && location.getY() >= 0;
     }
 
+    public PointOnMap[][] getMap() {
+        return map;
+    }
 }
