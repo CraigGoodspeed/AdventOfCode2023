@@ -12,4 +12,21 @@ class HashOnTest {
         assertEquals(52, hashOn.calculateHash());
     }
 
+    @Test
+    public void calculateIndexCheck() {
+        String[] itemsToCheck = new String[]
+                {
+                        "rn",
+                        "qp",
+                        "cm",
+                        "pc",
+                        "ot",
+                        "ab"
+                };
+        for(String item : itemsToCheck) {
+            HashOn hashOn = new HashOn(item);
+            System.out.println(hashOn.calculateHash());
+        }
+    }
+
 }
