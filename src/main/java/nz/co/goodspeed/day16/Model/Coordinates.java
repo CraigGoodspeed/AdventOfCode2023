@@ -11,6 +11,7 @@ public class Coordinates {
         this.direction = direction;
     }
 
+
     public int getX() {
         return x;
     }
@@ -42,5 +43,9 @@ public class Coordinates {
     @Override
     public int hashCode() {
         return Objects.hash(x, y, direction);
+    }
+
+    public Coordinates moveBy(int x, int y, Direction direction) {
+        return new Coordinates((getX() + x), (getY() + y), direction);
     }
 }
