@@ -28,4 +28,8 @@ public abstract class AppStartup {
     }
 
     public abstract void runForEachLine(String line);
+
+    public static String readAll(String filePath) throws IOException {
+        return new String(Files.readAllBytes(Paths.get(filePath)));
+    }
 }

@@ -48,4 +48,8 @@ public class Coordinates {
     public Coordinates moveBy(int x, int y, Direction direction) {
         return new Coordinates((getX() + x), (getY() + y), direction);
     }
+
+    public Coordinates moveBy(Coordinates coordinates) {
+        return moveBy(coordinates.getX(), coordinates.getY(), coordinates.getDirection());
+    }
 }

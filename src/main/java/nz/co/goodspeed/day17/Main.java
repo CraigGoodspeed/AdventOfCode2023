@@ -2,6 +2,7 @@ package nz.co.goodspeed.day17;
 
 import nz.co.goodspeed.AppStartup;
 import nz.co.goodspeed.day16.Model.Coordinates;
+import nz.co.goodspeed.day16.Model.Direction;
 import nz.co.goodspeed.day17.mode.Map;
 import nz.co.goodspeed.day17.mode.Node;
 
@@ -18,8 +19,9 @@ public class Main extends AppStartup {
         rawData = super.readAll();
         map = new Map(rawData);
         topLeft = new Node(
-                new Coordinates(0,0),
-                map
+                new Coordinates(0,0, Direction.LEFT_TO_RIGHT),
+                map,
+                 null
         );
     }
     @Override
@@ -33,17 +35,18 @@ public class Main extends AppStartup {
         Node tmp = mne.topLeft;
 
         while(tmp != null){
-            if(tmp.getHorizontal() != null)
-                tmp = tmp.getHorizontal();
+            if(tmp.getStraight() != null)
+                tmp = tmp.getStraight();
             else {
                 topRight = tmp;
                 break;
             }
         }
+        topRight = topRight.getRight();
         Node bottomLeft = null;
         while(topRight != null) {
-            if(topRight.getVertical() != null)
-                topRight = topRight.getVertical();
+            if(topRight.getStraight() != null)
+                topRight = topRight.getStraight();
             else {
                 bottomLeft = topRight;
                 break;
